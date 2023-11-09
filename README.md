@@ -3,12 +3,25 @@
 This project demonstrates a straightforward approach to uploading temperature and humidity data from a SeedStudio Xiao ESP32S3 to AWS IoT Sitewise.
 Unlike traditional methods that rely on AWS IoT Device Shadow for data storage and require redirection to AWS IoT Sitewise for historical data analysis, this approach offers several advantages:
 
-* Efficient Data Upload: Using AWS IoT Sitewise, we can batch-upload multiple data points, allowing the device to enter a sleep state after each data reading. This strategy minimizes both network data consumption and power consumption, making it ideal for resource-efficient operation.
+* Efficient Data Upload: Using AWS IoT Sitewise, we can batch-upload multiple data points, allowing the device to enter a sleep state after each data reading. This strategy minimizes network data usage and power consumption, making it ideal for resource-efficient operation.
 
-* Precise Timestamps: When data is uploaded to AWS IoT Sitewise, an accurate timestamp can accompany each data 
-point. In contrast, AWS IoT Device Shadow timestamps data based on the upload time to AWS IoT Core, introducing potential time gaps in data accuracy, ranging from milliseconds to seconds.
+* Precise Timestamps: When data is uploaded to AWS IoT Sitewise, an accurate timestamp can accompany each data point. In contrast, AWS IoT Device Shadow timestamps data based on the upload time to AWS IoT Core, introducing potential time gaps ranging from milliseconds to seconds.
 
-In this proof-of-concept (POC), I use the SeedStudio Xiao ESP32S3 to read temperature and humidity data from DHT11 sensors. The collected data is then uploaded to AWS IoT Sitewise, enabling us to access and monitor the historical dataset using Grafana conveniently.
+In this proof-of-concept (POC), I use the SeedStudio Xiao ESP32S3 to read temperature and humidity data from DHT11 sensors. The collected data is then uploaded to AWS IoT Sitewise, allowing us to access and monitor the historical dataset using Grafana conveniently. The follow diagram shows the idea.
+
+```mermaid
+sequenceDiagram
+    participant ESP32S3
+    participant Sitewise
+
+    ESP32S3->>ESP32S3: Collect 1st sample
+    Note over ESP32S3: sleep
+    ESP32S3->>ESP32S3: Collect 2nd sample
+    Note over ESP32S3: sleep
+    ESP32S3->>ESP32S3: Collect Nth sample
+    ESP32S3->>Sitewise: Batch upload samples
+    Sitewise->>ESP32S3: Success
+```
 
 By implementing this approach, we streamline the process of data acquisition and analysis, offering improved resource efficiency and more accurate historical data records for better decision-making and monitoring purposes.
 
