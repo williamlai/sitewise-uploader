@@ -1,26 +1,26 @@
-# Sitewatch Uploader
+# SiteWise Uploader
 
-This project demonstrates a straightforward approach to uploading temperature and humidity data from a SeedStudio Xiao ESP32S3 to AWS IoT Sitewise.
-Unlike traditional methods that rely on AWS IoT Device Shadow for data storage and require redirection to AWS IoT Sitewise for historical data analysis, this approach offers several advantages:
+This project demonstrates a straightforward approach to uploading temperature and humidity data from a SeedStudio Xiao ESP32S3 to AWS IoT SiteWise.
+Unlike traditional methods that rely on AWS IoT Device Shadow for data storage and require redirection to AWS IoT SiteWise for historical data analysis, this approach offers several advantages:
 
-* Efficient Data Upload: Using AWS IoT Sitewise, we can batch-upload multiple data points, allowing the device to enter a sleep state after each data reading. This strategy minimizes network data usage and power consumption, making it ideal for resource-efficient operation.
+* Efficient Data Upload: Using AWS IoT SiteWise, we can batch-upload multiple data points, allowing the device to enter a sleep state after each data reading. This strategy minimizes network data usage and power consumption, making it ideal for resource-efficient operation.
 
-* Precise Timestamps: When data is uploaded to AWS IoT Sitewise, an accurate timestamp can accompany each data point. In contrast, AWS IoT Device Shadow timestamps data based on the upload time to AWS IoT Core, introducing potential time gaps ranging from milliseconds to seconds.
+* Precise Timestamps: When data is uploaded to AWS IoT SiteWise, an accurate timestamp can accompany each data point. In contrast, AWS IoT Device Shadow timestamps data based on the upload time to AWS IoT Core, introducing potential time gaps ranging from milliseconds to seconds.
 
-In this proof-of-concept (POC), I use the SeedStudio Xiao ESP32S3 to read temperature and humidity data from DHT11 sensors. The collected data is then uploaded to AWS IoT Sitewise, allowing us to access and monitor the historical dataset using Grafana conveniently. The follow diagram shows the idea.
+In this proof-of-concept (POC), I use the SeedStudio Xiao ESP32S3 to read temperature and humidity data from DHT11 sensors. The collected data is then uploaded to AWS IoT SiteWise, allowing us to access and monitor the historical dataset using Grafana conveniently. The follow diagram shows the idea.
 
 ```mermaid
 sequenceDiagram
     participant ESP32S3
-    participant Sitewise
+    participant SiteWise
 
     ESP32S3->>ESP32S3: Collect 1st sample
     Note over ESP32S3: sleep
     ESP32S3->>ESP32S3: Collect 2nd sample
     Note over ESP32S3: sleep
     ESP32S3->>ESP32S3: Collect Nth sample
-    ESP32S3->>Sitewise: Batch upload samples
-    Sitewise->>ESP32S3: Success
+    ESP32S3->>SiteWise: Batch upload samples
+    SiteWise->>ESP32S3: Success
 ```
 
 By implementing this approach, we streamline the process of data acquisition and analysis, offering improved resource efficiency and more accurate historical data records for better decision-making and monitoring purposes.
@@ -42,9 +42,9 @@ The wiring is as follows.
 
 ![xiao_esp32s3_and_dht11.jpg](doc/images/xiao_esp32s3_and_dht11.jpg)
 
-## Configure AWS IoT Sitewise
+## Configure AWS IoT SiteWise
 
-First, we need to create a Sitewise model. This model includes two measurements: temperature and humidity, as shown in the image below.
+First, we need to create a SiteWise model. This model includes two measurements: temperature and humidity, as shown in the image below.
 
 ![sitewise_model.jpg](doc/images/sitewise_model.jpg)
 
@@ -77,9 +77,9 @@ Then configure these items:
   * **Amazon service region**
   * **GPIO output pin 0**: The data pin that we connect it to DHT11
   * **The measurement interval in seconds**: In the initial testing phase, it is recommended to use a 2-second interval. You can extend the monitoring interval once you have confirmed that it is working successfully.
-  * **Sitewise asset ID**: The Sitewise asset ID we noted in the previous section.
-  * **Sitewise property ID for temperature**: The temperature ID.
-  * **Sitewise property ID for humidity**: The humidity ID
+  * **SiteWise asset ID**: The SiteWise asset ID we noted in the previous section.
+  * **SiteWise property ID for temperature**: The temperature ID.
+  * **SiteWise property ID for humidity**: The humidity ID
 * **Example Connection Configuration**: The WiFi connection information of network access.
 
 Save the configuration, then build it.
@@ -94,7 +94,7 @@ Flash the image and monitor how it runs.
 idf.py flash monitor
 ```
 
-It will collect 10 data samples before uploading to Sitewise. You will see logs similar to the following:
+It will collect 10 data samples before uploading to SiteWise. You will see logs similar to the following:
 
 ```
 I (9543) sitewise_uploader: Collect 1th sample: T:27 H:40
@@ -113,7 +113,7 @@ I (32423) sitewise_uploader: HTTP POST Status = 200, content_length = 19
 {"errorEntries":[]}
 ```
 
-You can also check the AWS Sitewise console and see if the temperature and humidity properties have been updated.
+You can also check the AWS SiteWise console and see if the temperature and humidity properties have been updated.
 
 ## View historical data on Grafana
 

@@ -19,7 +19,7 @@ config AWS_DEFAULT_REGION
         Amazon service region
 
 config DHT11_GPIO
-    int "GPIO output pin 0"
+    int "DHT data pin"
     range ENV_GPIO_RANGE_MIN ENV_GPIO_OUT_RANGE_MAX
     default 9
     help
@@ -32,21 +32,21 @@ config MEASUREMENT_INTERVAL_S
         The measurement interval in seconds
 
 config SITEWISE_ASSET_ID
-    string "Sitewise asset ID"
+    string "SiteWise asset ID"
     default ""
     help
-        Amazon Sitewise asset ID
+        Amazon SiteWise asset ID
 
 config SITEWISE_TEMPERATURE_PROPERTY_ID
-    string "Sitewise property ID for temperature"
+    string "SiteWise property ID for temperature"
     default ""
     help
-        Amazon Sitewise property ID for temperature
+        Amazon SiteWise property ID for temperature
 
 config SITEWISE_HUMIDITY_PROPERTY_ID
-    string "Sitewise property ID for humidity"
+    string "SiteWise property ID for humidity"
     default ""
     help
-        Amazon Sitewise property ID for humidity
+        Amazon SiteWise property ID for humidity
 
 endmenu
