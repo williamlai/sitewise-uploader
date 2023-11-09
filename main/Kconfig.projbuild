@@ -1,0 +1,52 @@
+menu "Example Configuration"
+
+config AWS_ACCESS_KEY
+    string "Amazon service access key ID"
+    default ""
+    help
+        Amazon service Access key ID
+
+config AWS_SECRET_KEY
+    string "Amazon service access secret"
+    default ""
+    help
+        Amazon service Access secret
+
+config AWS_DEFAULT_REGION
+    string "Amazon service region"
+    default "us-east-1"
+    help
+        Amazon service region
+
+config DHT11_GPIO
+    int "GPIO output pin 0"
+    range ENV_GPIO_RANGE_MIN ENV_GPIO_OUT_RANGE_MAX
+    default 9
+    help
+        GPIO pin number to be used for DHT11
+
+config MEASUREMENT_INTERVAL_S
+    int "The measurement interval in seconds"
+    default 2
+    help
+        The measurement interval in seconds
+
+config SITEWISE_ASSET_ID
+    string "Sitewise asset ID"
+    default ""
+    help
+        Amazon Sitewise asset ID
+
+config SITEWISE_TEMPERATURE_PROPERTY_ID
+    string "Sitewise property ID for temperature"
+    default ""
+    help
+        Amazon Sitewise property ID for temperature
+
+config SITEWISE_HUMIDITY_PROPERTY_ID
+    string "Sitewise property ID for humidity"
+    default ""
+    help
+        Amazon Sitewise property ID for humidity
+
+endmenu
