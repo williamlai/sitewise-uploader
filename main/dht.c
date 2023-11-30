@@ -6,7 +6,7 @@
 #include "esp_rom_sys.h"
 #include "sdkconfig.h"
 
-#include "dht11.h"
+#include "dht.h"
 
 static int waitUntilTimeout(gpio_num_t dht11_gpio, int usTimeout, int level, int *pUsTick)
 {
@@ -79,10 +79,12 @@ static int readByte(gpio_num_t dht11_gpio, uint8_t *pByte)
     return result;
 }
 
-int DHT11_read(gpio_num_t dht11_gpio, int *pTemperature, int *pHumidity)
+int DHT_read(DhtType_t type, gpio_num_t dht11_gpio, float *pTemperature, float *pHumidity)
 {
     int result = DHT11_ERROR_NONE;
     uint8_t data[5] = { 0 };
+    float temperature = 0.0f;
+    float humidity = 0.0f;
 
     sendStartSignal(dht11_gpio);
 
@@ -111,13 +113,38 @@ int DHT11_read(gpio_num_t dht11_gpio, int *pTemperature, int *pHumidity)
         }
         else
         {
+            if (type == DHT11)
+            {
+                humidity = ((uint16_t)data[0]) << 8 | data[1];
+                humidity *= 0.1;
+
+                temperature = data[2];
+                if (data[3] & 0x80)
+                {
+                    temperature = -1 - temperature;
+                }
+                temperature += (data[3] & 0x0F) * 0.1;
+            }
+            else if (type == DHT22)
+            {
+                humidity = ((uint16_t)data[0]) << 8 | data[1];
+                humidity *= 0.1;
+
+                temperature = ((uint16_t)data[2] & 0x7F) << 8 | data[3];
+                temperature *= 0.1;
+                if (data[2] & 0x80)
+                {
+                    temperature *= -1;
+                }
+            }
+
             if (pTemperature != NULL)
             {
-                *pTemperature = data[2];
+                *pTemperature = temperature;
             }
             if (pHumidity != NULL)
             {
-                *pHumidity = data[0];
+                *pHumidity = humidity;
             }
         }
     }

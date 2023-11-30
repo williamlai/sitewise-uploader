@@ -75,7 +75,8 @@ Then configure these items:
   * **Amazon service access key ID**
   * **Amazon service access secret**
   * **Amazon service region**
-  * **GPIO output pin 0**: The data pin that we connect it to DHT11
+  * **GPIO output pin 0**: The data pin that we connect it to DHT11/DHT22
+  * **DHT TYPE**: 11 for DHT11, 22 for DHT22
   * **The measurement interval in seconds**: In the initial testing phase, it is recommended to use a 2-second interval. You can extend the monitoring interval once you have confirmed that it is working successfully.
   * **SiteWise asset ID**: The SiteWise asset ID we noted in the previous section.
   * **SiteWise property ID for temperature**: The temperature ID.

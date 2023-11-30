@@ -20,7 +20,7 @@
 
 #include "aws_sig_v4_signing.h"
 
-#include "dht11.h"
+#include "dht.h"
 #include "sitewise.h"
 
 static const char *TAG = "sitewise_uploader";
@@ -135,8 +135,8 @@ static void dht11_read_task(void *pvParameters)
     Entry_t *pTemperatureEntry = &(dht11Entries[0]);
     Entry_t *pHumidityEntry = &(dht11Entries[1]);
     int dataCount = 0;
-    int temperature = 0;
-    int humidity = 0;
+    float temperature = 0;
+    float humidity = 0;
     struct timeval tv;
 
     pTemperatureEntry->assetId = CONFIG_SITEWISE_ASSET_ID;
@@ -149,7 +149,7 @@ static void dht11_read_task(void *pvParameters)
 
     while (1)
     {
-        if (DHT11_read(CONFIG_DHT11_GPIO, &temperature, &humidity) == DHT11_ERROR_NONE)
+        if (DHT_read(CONFIG_DHT_TYPE, CONFIG_DHT_GPIO, &temperature, &humidity) == DHT11_ERROR_NONE)
         {
             gettimeofday(&tv, NULL);
 
@@ -164,7 +164,7 @@ static void dht11_read_task(void *pvParameters)
             dataCount++;
             pTemperatureEntry->propertyValuesLen = dataCount;
             pHumidityEntry->propertyValuesLen = dataCount;
-            ESP_LOGI(TAG, "Collect %dth sample: T:%d H:%d", dataCount, temperature, humidity);
+            ESP_LOGI(TAG, "Collect %dth sample: T:%.1f H:%.1f", dataCount, temperature, humidity);
 
             if (dataCount == MAX_SITEWISE_PROPERTY_VALUE_SIZE)
             {

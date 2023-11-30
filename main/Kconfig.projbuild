@@ -18,12 +18,18 @@ config AWS_DEFAULT_REGION
     help
         Amazon service region
 
-config DHT11_GPIO
+config DHT_GPIO
     int "DHT data pin"
     range ENV_GPIO_RANGE_MIN ENV_GPIO_OUT_RANGE_MAX
     default 9
     help
-        GPIO pin number to be used for DHT11
+        GPIO pin number to be used for DHT11/DHT22
+
+config DHT_TYPE
+    int "DHT type"
+    default 11
+    help
+        11 for DHT11, 22 for DHT22
 
 config MEASUREMENT_INTERVAL_S
     int "The measurement interval in seconds"

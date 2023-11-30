@@ -11,6 +11,12 @@ extern "C" {
 #define DHT11_ERROR_TIMEOUT     (-1)
 #define DHT11_ERROR_CRC         (-2)
 
+typedef enum
+{
+    DHT11 = 11,
+    DHT22 = 22,
+} DhtType_t;
+
 /**
  * Do the one-wire protocol on GPIO dht11_gpio, get the results of temperature and humidity.
  * 
@@ -19,7 +25,7 @@ extern "C" {
  * @param[out] pHumidity Pointer to store the humidity
  * @return 0 on success, non-zero value otherwise
  */
-int DHT11_read(gpio_num_t dht11_gpio, int *pTemperature, int *pHumidity);
+int DHT_read(DhtType_t type, gpio_num_t dht_gpio, float *pTemperature, float *pHumidity);
 
 #ifdef __cplusplus
 }
